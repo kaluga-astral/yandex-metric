@@ -1,0 +1,13 @@
+{
+  "extends": "../tsconfig.json",
+  "include": [
+    "./**/*.ts",
+    "./**/*.tsx",
+    "./*.js",
+    "./*.ts",
+    "global.d.ts",
+  ],
+  "exclude": [
+    "lib"
+  ]
+}
