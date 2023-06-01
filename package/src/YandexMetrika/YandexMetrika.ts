@@ -1,13 +1,13 @@
 /**
  * @description все параметры из документации https://yandex.ru/support/metrica/code/counter-initialize.html
  */
-export type DocParams = {
+export type YandexMetrikaParams = {
   accurateTrackBounce?: boolean | number;
   childIframe?: boolean;
   clickmap?: boolean;
   defer?: boolean;
   ecommerce?: boolean | string;
-  userParams?: Record<string, unknown>;
+  userParams?: Array<unknown> | Record<string, unknown>;
   trackHash?: boolean;
   trackLinks?: boolean;
   trustedDomains?: string[];
@@ -16,11 +16,7 @@ export type DocParams = {
   triggerEvent?: boolean;
 };
 
-export type InitParams = {
-  /**
-   * Параметры инициализации счетчика
-   */
-  docParams?: DocParams;
+export type YandexMetrikaInitParams = YandexMetrikaParams & {
   /**
    * ID счетчика
    */
@@ -51,28 +47,31 @@ export type ReachGoalParams = {
   extra?: object;
 };
 
-const DEFAULT_DOC_PARAMS: DocParams = {
+const DEFAULT_DOC_PARAMS: YandexMetrikaParams = {
   clickmap: true,
   trackLinks: true,
   accurateTrackBounce: true,
   webvisor: true,
 };
 
-export class Metrika {
+export class YandexMetrika {
   private enabled?: boolean = true;
 
   private onError?: (error: Error) => void = undefined;
 
   private counterID: string = '';
 
+  /**
+   * @description Метод получения объекта Яндекс.Метрики из глобальной области видимости
+   */
   private get metrika() {
     if (Boolean(window.ym)) {
       return window.ym;
     } else {
-      const unavailableError = 'Сервис Яндекс.Метрики недоступен';
+      const unavailableError = new Error('Сервис Яндекс.Метрики недоступен');
 
       console.error(unavailableError);
-      this.handleError(new Error(unavailableError));
+      this.handleError(unavailableError);
 
       return () => {};
     }
@@ -88,6 +87,10 @@ export class Metrika {
     }
   };
 
+  /**
+   * @description Вызывает передаваемый callback в зависимости от флага enabled, установленного при инициилизации
+   * @param {void} callback Вызываемый метод
+   */
   private runCommand = (callback: () => void) => {
     if (this.enabled) {
       callback();
@@ -104,9 +107,23 @@ export class Metrika {
 
   /**
    * @description Метод инициилизации сервиса метрик
-   * @example Metrika.init({ counterID: 'XXXXXX', enabled: process.env.IS_PRODUCTION })
+   * @example YandexMetrika.init({ counterID: 'XXXXXX', enabled: process.env.IS_PRODUCTION })
+   * @param {YandexMetrikaInitParams} params
+   * @param {boolean} [params.clickmap=true]
+   * @param {boolean} [params.trackLinks=true]
+   * @param {boolean} [params.accurateTrackBounce=true]
+   * @param {boolean} [params.webvisor=true]
    */
-  public init({ docParams = {}, enabled, onError, counterID }: InitParams) {
+  public init({
+    enabled,
+    onError,
+    counterID,
+    ...docParams
+  }: YandexMetrikaInitParams) {
+    if (!Boolean(counterID)) {
+      throw new Error('Необходимо передать counterID');
+    }
+
     this.enabled = enabled;
     this.onError = onError;
     this.counterID = counterID;
@@ -118,7 +135,7 @@ export class Metrika {
 
   /**
    * @description Метод достижения цели
-   * @example Metrika.reachGoal({ target: "XXXXXX", extra: { param: "values" } })
+   * @example YandexMetrika.reachGoal({ target: "XXXXXX", extra: { param: "values" } })
    */
   public reachGoal({ target, extra, onSuccess }: ReachGoalParams) {
     this.runCommand(() => {
@@ -130,7 +147,7 @@ export class Metrika {
 
   /**
    * @description Метод, позволяющий к счетчику добавить произвольные пользовательские данные
-   * @example Metrika.addUserInfo({ param: "XXXXXX" })
+   * @example YandexMetrika.addUserInfo({ param: "XXXXXX" })
    */
   public addUserInfo(info: Record<string, unknown>) {
     this.runCommand(() => this.metrika(this.counterID, 'userParams', info));
@@ -138,9 +155,9 @@ export class Metrika {
 
   /**
    * @description Метод, позволяющий передать произвольные параметры визита
-   * @example Metrika.addParam({ param: "XXXXXX" })
+   * @example YandexMetrika.addParam({ param: "XXXXXX" })
    */
-  public addParam(params: Record<string, unknown>) {
-    this.runCommand(() => this.metrika(this.counterID, 'addParam', params));
+  public addParams(params: Record<string, unknown>) {
+    this.runCommand(() => this.metrika(this.counterID, 'addParams', params));
   }
 }
