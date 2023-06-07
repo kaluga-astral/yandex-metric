@@ -107,7 +107,7 @@ export class YandexMetrika {
 
   /**
    * @description Метод инициилизации сервиса метрик
-   * @example YandexMetrika.init({ counterID: 'XXXXXX', enabled: process.env.IS_PRODUCTION })
+   * @example yandexMetrika.init({ counterID: 'XXXXXX', enabled: process.env.IS_PRODUCTION })
    * @param {YandexMetrikaInitParams} params
    * @param {boolean} [params.clickmap=true]
    * @param {boolean} [params.trackLinks=true]
@@ -120,8 +120,11 @@ export class YandexMetrika {
     counterID,
     ...docParams
   }: YandexMetrikaInitParams) {
-    if (!Boolean(counterID)) {
-      throw new Error('Необходимо передать counterID');
+    if (!Boolean(counterID) && enabled) {
+      const error = new Error('Необходимо передать counterID');
+
+      console.error(error);
+      onError?.(error);
     }
 
     this.enabled = enabled;
@@ -130,12 +133,14 @@ export class YandexMetrika {
 
     const params = { ...DEFAULT_DOC_PARAMS, ...docParams };
 
-    this.metrika(this.counterID, 'init', params);
+    if (enabled) {
+      this.metrika(this.counterID, 'init', params);
+    }
   }
 
   /**
    * @description Метод достижения цели
-   * @example YandexMetrika.reachGoal({ target: "XXXXXX", extra: { param: "values" } })
+   * @example yandexMetrika.reachGoal({ target: "XXXXXX", extra: { param: "values" } })
    */
   public reachGoal({ target, extra, onSuccess }: ReachGoalParams) {
     this.runCommand(() => {
@@ -147,7 +152,7 @@ export class YandexMetrika {
 
   /**
    * @description Метод, позволяющий к счетчику добавить произвольные пользовательские данные
-   * @example YandexMetrika.addUserInfo({ param: "XXXXXX" })
+   * @example yandexMetrika.addUserInfo({ param: "XXXXXX" })
    */
   public addUserInfo(info: Record<string, unknown>) {
     this.runCommand(() => this.metrika(this.counterID, 'userParams', info));
@@ -155,7 +160,7 @@ export class YandexMetrika {
 
   /**
    * @description Метод, позволяющий передать произвольные параметры визита
-   * @example YandexMetrika.addParam({ param: "XXXXXX" })
+   * @example yandexMetrika.addParam({ param: "XXXXXX" })
    */
   public addParams(params: Record<string, unknown>) {
     this.runCommand(() => this.metrika(this.counterID, 'addParams', params));
