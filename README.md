@@ -48,7 +48,7 @@ const yandexMetrika = new YandexMetrika();
 yandexMetrika.init({ 
   enabled: process.env.IS_PRODUCTION,
   counterID: 'XXXXXX',
-  onEror: (error) => console.error(error) 
+  onEror: sentry.captureException
 })
 ```
 
