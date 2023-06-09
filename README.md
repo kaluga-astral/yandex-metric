@@ -1,12 +1,10 @@
 # @astral/yandex-metrika
 
----
-
 Библиотека для взаимодействия с Яндекс.Метрикой
 
-# Table of contents
-
 ---
+
+# Table of contents
 
 - [Installation](#installation)
 - [Добавление скрипта в html](#installation)
@@ -26,8 +24,6 @@ npm i --save @astral/yandex-metrika
 ```shell
 yarn add @astral/yandex-metrika
 ```
-
----
 
 Добавление скрипта в html
 
@@ -56,8 +52,6 @@ yandexMetrika.init({
 })
 ```
 
----
-
 ## reachGoal
 Метод достижения цели.
 
@@ -68,8 +62,6 @@ yandexMetrika.reachGoal({
   onSuccess: () => console.info('success') 
 })
 ```
-
----
 
 ## addUserInfo
 Метод, позволяющий к счетчику добавить произвольные пользовательские данные.
@@ -82,8 +74,6 @@ yandexMetrika.addUserInfo({
 })
 ```
 
----
-
 ## addParams
 Метод, позволяющий передать произвольные параметры визита.
 
@@ -94,8 +84,6 @@ yandexMetrika.addParams({
   ...
 })
 ```
-
----
 
 # Custom reachGoal
 

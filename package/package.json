@@ -11,9 +11,5 @@
     "lint:types": "tsc --noEmit",
     "lint": "eslint --fix --quiet",
     "lint:all": "eslint \"**/*.{ts,tsx}\" --fix --quiet"
-  },
-  "dependencies": {
-    "is-plain-obj": "^4.1.0",
-    "utility-types": "^3.10.0"
   }
 }
