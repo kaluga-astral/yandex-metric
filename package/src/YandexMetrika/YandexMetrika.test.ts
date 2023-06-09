@@ -12,9 +12,7 @@ describe('YandexMetrika.init', () => {
     yandexMetrika.init(initParams);
     expect(initParams.onError).toHaveBeenCalled();
   });
-});
 
-describe('YandexMetrika.init', () => {
   it('Не вызывается переданный onError при отсутствии ym в window и флаге enabled=false', () => {
     const initParams = {
       counterID: 'counterID',
