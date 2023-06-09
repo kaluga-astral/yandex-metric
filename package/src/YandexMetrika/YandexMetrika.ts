@@ -117,13 +117,13 @@ export class YandexMetrika {
       onError?.(error);
     }
 
-    this.enabled = enabled;
+    this.enabled = enabled && typeof window !== 'undefined';
     this.onError = onError;
     this.counterID = counterID;
 
     const params = { ...DEFAULT_PARAMS, ...props };
 
-    if (enabled) {
+    if (this.enabled) {
       this.metrika(this.counterID, 'init', params);
     }
   }
