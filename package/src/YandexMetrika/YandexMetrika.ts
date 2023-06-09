@@ -123,7 +123,7 @@ export class YandexMetrika {
 
     const params = { ...DEFAULT_PARAMS, ...props };
 
-    if (enabled && typeof window !== 'undefined') {
+    if (this.enabled) {
       this.metrika(this.counterID, 'init', params);
     }
   }
