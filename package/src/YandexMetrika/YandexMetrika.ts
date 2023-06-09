@@ -65,27 +65,17 @@ export class YandexMetrika {
    * @description Метод получения объекта Яндекс.Метрики из глобальной области видимости
    */
   private get metrika() {
-    if (Boolean(window.ym)) {
+    if (Boolean(window?.ym)) {
       return window.ym;
     } else {
       const unavailableError = new Error('Сервис Яндекс.Метрики недоступен');
 
       console.error(unavailableError);
-      this.handleError(unavailableError);
+      this.onError?.(unavailableError);
 
       return () => {};
     }
   }
-
-  /**
-   * @description Метод для вызова onError callback
-   * @param error {Error} Объект ошибки
-   */
-  private handleError = (error: Error) => {
-    if (this.onError) {
-      this.onError(error);
-    }
-  };
 
   /**
    * @description Вызывает передаваемый callback в зависимости от флага enabled, установленного при инициилизации
@@ -115,7 +105,7 @@ export class YandexMetrika {
    * @param {boolean} [params.webvisor=true]
    */
   public init({
-    enabled,
+    enabled = true,
     onError,
     counterID,
     ...docParams
