@@ -1,1 +1,6 @@
-export * from './YandexMetrika';
+export {
+  YandexMetrikaParams,
+  YandexMetrika,
+  YandexMetrikaInitParams,
+  ReachGoalParams,
+} from './YandexMetrika';

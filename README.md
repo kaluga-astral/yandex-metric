@@ -1,12 +1,10 @@
 # @astral/yandex-metrika
 
----
-
 Библиотека для взаимодействия с Яндекс.Метрикой
 
-# Table of contents
-
 ---
+
+# Table of contents
 
 - [Installation](#installation)
 - [Добавление скрипта в html](#installation)
@@ -26,8 +24,6 @@ npm i --save @astral/yandex-metrika
 ```shell
 yarn add @astral/yandex-metrika
 ```
-
----
 
 Добавление скрипта в html
 
@@ -52,11 +48,18 @@ const yandexMetrika = new YandexMetrika();
 yandexMetrika.init({ 
   enabled: process.env.IS_PRODUCTION,
   counterID: 'XXXXXX',
-  onEror: (error) => console.error(error) 
+  onEror: sentry.captureException
 })
 ```
 
----
+По-умолчанию установлены параметры:
+
+```ts
+clickmap: true;
+trackLinks: true;
+accurateTrackBounce: true;
+webvisor: true;
+```
 
 ## reachGoal
 Метод достижения цели.
@@ -69,8 +72,6 @@ yandexMetrika.reachGoal({
 })
 ```
 
----
-
 ## addUserInfo
 Метод, позволяющий к счетчику добавить произвольные пользовательские данные.
 
@@ -82,8 +83,6 @@ yandexMetrika.addUserInfo({
 })
 ```
 
----
-
 ## addParams
 Метод, позволяющий передать произвольные параметры визита.
 
@@ -94,8 +93,6 @@ yandexMetrika.addParams({
   ...
 })
 ```
-
----
 
 # Custom reachGoal
 
