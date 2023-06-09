@@ -47,7 +47,7 @@ export type ReachGoalParams = {
   extra?: object;
 };
 
-const DEFAULT_DOC_PARAMS: YandexMetrikaParams = {
+const DEFAULT_PARAMS: YandexMetrikaParams = {
   clickmap: true,
   trackLinks: true,
   accurateTrackBounce: true,
@@ -108,7 +108,7 @@ export class YandexMetrika {
     enabled = true,
     onError,
     counterID,
-    ...docParams
+    ...props
   }: YandexMetrikaInitParams) {
     if (!Boolean(counterID) && enabled) {
       const error = new Error('Необходимо передать counterID');
@@ -121,7 +121,7 @@ export class YandexMetrika {
     this.onError = onError;
     this.counterID = counterID;
 
-    const params = { ...DEFAULT_DOC_PARAMS, ...docParams };
+    const params = { ...DEFAULT_PARAMS, ...props };
 
     if (enabled) {
       this.metrika(this.counterID, 'init', params);
