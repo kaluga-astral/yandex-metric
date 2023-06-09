@@ -52,6 +52,15 @@ yandexMetrika.init({
 })
 ```
 
+По-умолчанию установлены параметры:
+
+```ts
+clickmap: true;
+trackLinks: true;
+accurateTrackBounce: true;
+webvisor: true;
+```
+
 ## reachGoal
 Метод достижения цели.
 
