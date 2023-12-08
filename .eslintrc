@@ -14,5 +14,11 @@
         ]
       }
     ]
-  }
+  },
+  "overrides": [
+    {
+      "files": "**/*.test.ts",
+      "extends": ["@astral/eslint-config-vitest"]
+    }
+  ]
 }
